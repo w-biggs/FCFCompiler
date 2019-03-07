@@ -1,9 +1,10 @@
 //const json = require('./bc.json');
+const teams = require('./config/teams.json');
 const fs = require('fs');
 const readline = require('readline');
 const https = require('https');
 const {google} = require('googleapis');
-const authorize = require('./google.js');
+const authorize = require('./utils/google.js');
 
 const rl = readline.createInterface(process.stdin, process.stdout);
 
