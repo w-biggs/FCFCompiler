@@ -72,6 +72,8 @@ rl.on('line', function(line) {
             gameJson.away.q3 = match[25];
             gameJson.away.q4 = match[26];
             gameJson.away.score = match[27];
+          } else {
+            return console.log("No games found.");
           }
           if(data.selftext.includes("[Plays]")){
             const pasteIndex = data.selftext.indexOf("[Plays](") + 1;
@@ -81,17 +83,17 @@ rl.on('line', function(line) {
             );
           } 
           newJson.games.push(gameJson);
-        }
-      });
       
-      fs.writeFile("./out.json", JSON.stringify(newJson, null, 2  ), err => {
-        if(err){
-          return console.log(err);
+          fs.writeFile("./out.json", JSON.stringify(newJson, null, 2  ), err => {
+            if(err){
+              return console.log(err);
+            }
+            console.log("done!");
+          });
         }
-        console.log("done!");
       });
     });
   }).on('error', function(e){
-      console.log("Got an HTTP error: ", e);
+    console.log("Got an HTTP error: ", e);
   });
 });
