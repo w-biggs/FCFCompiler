@@ -44,34 +44,34 @@ rl.on('line', function(line) {
           var match = regex.exec(data.selftext);
           if(match){
             match = match.slice(1,29);
-            gameJson.away.name = match[0];
-            gameJson.home.name = match[1];
-            gameJson.away.passYds = match[2];
-            gameJson.away.rushYds = match[3];
-            gameJson.away.ints = match[4];
-            gameJson.away.fumbles = match[5];
-            gameJson.away.fgm = match[6];
-            gameJson.away.fga = match[7];
-            gameJson.away.poss = match[8];
-            gameJson.away.timeouts = match[9];
-            gameJson.home.passYds = match[10];
-            gameJson.home.rushYds = match[11];
-            gameJson.home.ints = match[12];
-            gameJson.home.fumbles = match[13];
-            gameJson.home.fgm = match[14];
-            gameJson.home.fga = match[15];
-            gameJson.home.poss = match[16];
-            gameJson.home.timeouts = match[17];
-            gameJson.home.q1 = match[18];
-            gameJson.home.q2 = match[19];
-            gameJson.home.q3 = match[20];
-            gameJson.home.q4 = match[21];
-            gameJson.home.score = match[22];
-            gameJson.away.q1 = match[23];
-            gameJson.away.q2 = match[24];
-            gameJson.away.q3 = match[25];
-            gameJson.away.q4 = match[26];
-            gameJson.away.score = match[27];
+            [gameJson.away.name,
+              gameJson.home.name,
+              gameJson.away.passYds,
+              gameJson.away.rushYds,
+              gameJson.away.ints,
+              gameJson.away.fumbles,
+              gameJson.away.fgm,
+              gameJson.away.fga,
+              gameJson.away.poss,
+              gameJson.away.timeouts,
+              gameJson.home.passYds,
+              gameJson.home.rushYds,
+              gameJson.home.ints,
+              gameJson.home.fumbles,
+              gameJson.home.fgm,
+              gameJson.home.fga,
+              gameJson.home.poss,
+              gameJson.home.timeouts,
+              gameJson.home.q1,
+              gameJson.home.q2,
+              gameJson.home.q3,
+              gameJson.home.q4,
+              gameJson.home.score,
+              gameJson.away.q1,
+              gameJson.away.q2,
+              gameJson.away.q3,
+              gameJson.away.q4,
+              gameJson.away.score] = match;
           } else {
             return console.log("No games found.");
           }
@@ -83,15 +83,17 @@ rl.on('line', function(line) {
             );
           } 
           newJson.games.push(gameJson);
-      
-          fs.writeFile("./out.json", JSON.stringify(newJson, null, 2  ), err => {
-            if(err){
-              return console.log(err);
-            }
-            console.log("done!");
-          });
         }
       });
+      
+      if(newJson.games.length > 0){
+        fs.writeFile("./out.json", JSON.stringify(newJson, null, 2  ), err => {
+          if(err){
+            return console.log(err);
+          }
+          console.log("done!");
+        });
+      }
     });
   }).on('error', function(e){
     console.log("Got an HTTP error: ", e);
