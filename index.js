@@ -112,7 +112,7 @@ const writeSheet = (auth, stats) => {
   const resource = {
     values: statsArray
   };
-  sheets.spreadsheets.values.append({
+  sheets.spreadsheets.values.update({
     spreadsheetId: process.env.STAT_SHEET,
     range: 'Sheet1!A2',
     valueInputOption: "USER_ENTERED",
