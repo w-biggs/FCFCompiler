@@ -1,15 +1,19 @@
+/* Nov. 28, 2019 - Season Two Begins */
+const season = 1543363200.0;
+
 module.exports = function genJson(rawJson){
   let newJson = {
     "games": []
   };
   rawJson.data.children.forEach(thread => {
     const data = thread.data;
-    if(data.link_flair_richtext.some(e => e.t === "Post Game Thread")){
+    if(data.created_utc > season && data.link_flair_richtext.some(e => e.t === "Post Game Thread")){
       let gameJson = {
         away: {},
         home: {}
       };
       gameJson.id = data.id;
+      gameJson.date_utc = data.created_utc;
       gameJson.scrimmage = data.title.includes("[Scrimmage]");
       const regex = /\*\*(.*?)\*\* @ .*?\*\*(.*?)\*\*[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|(.*?) yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|(.*?)yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n/gm;
       let match = regex.exec(data.selftext);
