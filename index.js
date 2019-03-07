@@ -16,7 +16,7 @@ rl.setPrompt('Enter the name of a team. ');
 rl.prompt();
 
 rl.on('line', function(line) {
-  reqUrl = "https://www.reddit.com/r/FakeCollegeFootball/search.json?q=flair%3APost%2BGame%2BThread%20" + line + "&sort=new&restrict_sr=on";
+  reqUrl = "https://www.reddit.com/r/FakeCollegeFootball/search.json?q=flair%3APost%2BGame%2BThread%20" + line + "&sort=new&restrict_sr=on&limit=100";
   rl.close();
 }).on('close', function(){
   https.get(reqUrl, function(res){
@@ -58,14 +58,15 @@ const genJson = (rawJson) => {
         home: {}
       };
       gameJson.scrimmage = data.title.includes("[Scrimmage]");
-      const regex = /\*\*(.*?)\*\* @ .*?\*\*(.*?)\*\*[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|.*?yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|.*?yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n/gm;
+      const regex = /\*\*(.*?)\*\* @ .*?\*\*(.*?)\*\*[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|(.*?) yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|(.*?)yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n/gm;
       let match = regex.exec(data.selftext);
       if(match){
-        match = match.slice(1,29);
+        match = match.slice(1,31);
         [gameJson.away.name,
           gameJson.home.name,
           gameJson.away.passYds,
           gameJson.away.rushYds,
+          gameJson.away.yds,
           gameJson.away.ints,
           gameJson.away.fumbles,
           gameJson.away.fgm,
@@ -74,6 +75,7 @@ const genJson = (rawJson) => {
           gameJson.away.timeouts,
           gameJson.home.passYds,
           gameJson.home.rushYds,
+          gameJson.home.yds,
           gameJson.home.ints,
           gameJson.home.fumbles,
           gameJson.home.fgm,
