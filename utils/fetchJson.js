@@ -1,3 +1,5 @@
+const https = require('https');
+
 module.exports = (teamName, callback) => {
   if(typeof teamName === 'undefined'){
     teamName = "";
@@ -12,15 +14,8 @@ module.exports = (teamName, callback) => {
   
     res.on('end', function(){
       rawJson = JSON.parse(body);
-      const newJson = gameJson(rawJson);
-      if(newJson.games.length > 0){
-        console.log("Successfully fetched JSON for " + teamName);
-        callback();
-        /*writeJson(newJson);
-        authorize((auth) => {
-          writeSheet(auth, newJson);
-        });*/
-      }
+      console.log("Successfully fetched JSON for " + teamName);
+      callback(rawJson);
     });
   }).on('error', function(e){
     console.log("Got an HTTP error: ", e);

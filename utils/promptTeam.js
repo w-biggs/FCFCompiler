@@ -1,3 +1,5 @@
+const readline = require('readline');
+
 module.exports = (callback) => {
   const rl = readline.createInterface(process.stdin, process.stdout);
 

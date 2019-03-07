@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const writeGames = (json) => {
   fs.readFile('./games.json', function (err, data) {
     if(err){
@@ -26,5 +28,5 @@ const writeGames = (json) => {
 }
 
 module.exports = {
-  writeGamesJson
+  writeGames
 }
