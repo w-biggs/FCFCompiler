@@ -1,0 +1,15 @@
+{
+  "name": "fcf-compiler",
+  "version": "0.1.0",
+  "description": "Compiles scores from Fake College Football games for easy analysis",
+  "main": "index.js",
+  "repository": "https://github.com/w-biggs/FCFCompiler.git",
+  "author": "wilsonbiggs <wilson@wilsonbiggs.com>",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "27"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}

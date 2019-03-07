@@ -2,6 +2,8 @@
 const fs = require('fs');
 const readline = require('readline');
 const https = require('https');
+const {google} = require('googleapis');
+const authorize = require('./google.js');
 
 const rl = readline.createInterface(process.stdin, process.stdout);
 
@@ -26,13 +28,16 @@ rl.on('line', function(line) {
   
     res.on('end', function(){
       rawJson = JSON.parse(body);
-      const newJson = genJson(json);
+      const newJson = genJson(rawJson);
       if(newJson.games.length > 0){
         fs.writeFile("./out.json", JSON.stringify(newJson, null, 2), err => {
           if(err){
             return console.log(err);
           }
           console.log("done!");
+        });
+        authorize((auth) => {
+          writeSheet(auth, newJson);
         });
       }
     });
@@ -54,7 +59,7 @@ const genJson = (rawJson) => {
       };
       gameJson.scrimmage = data.title.includes("[Scrimmage]");
       const regex = /\*\*(.*?)\*\* @ .*?\*\*(.*?)\*\*[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|.*?yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n(.*?) yards\|(.*?) yards\|.*?yards\|(.*?)\|(.*?)\|(.*?)\/(.*?)\|(.*?)\|(.*?)\n[\s\S]*?:-:\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n.*?\|(.*?)\|(.*?)\|(.*?)\|(.*?)\|\*\*(.*?)\*\*\n/gm;
-      const match = regex.exec(data.selftext);
+      let match = regex.exec(data.selftext);
       if(match){
         match = match.slice(1,29);
         [gameJson.away.name,
@@ -99,4 +104,55 @@ const genJson = (rawJson) => {
     }
   });
   return newJson;
+}
+
+const writeSheet = (auth, stats) => {
+  const sheets = google.sheets({version: 'v4', auth});
+  const statsArray = jsonToArray(stats);
+  const resource = {
+    values: statsArray
+  };
+  sheets.spreadsheets.values.append({
+    spreadsheetId: process.env.STAT_SHEET,
+    range: 'Sheet1!A2',
+    valueInputOption: "USER_ENTERED",
+    resource
+  }, (err, result) => {
+    if (err) {
+      // Handle error.
+      console.log(err);
+      //console.log("error!");
+    } else {
+      console.log("success!");
+    }
+  });
+}
+
+const jsonToArray = (json) => {
+  let cells = [];
+  json.games.forEach(game => {
+    cells.push(teamRow(game.home));
+    cells.push(teamRow(game.away));
+    cells.push([]);
+  });
+  return cells;
+}
+
+const teamRow = (team) => {
+  return [
+    team.name,
+    team.passYds,
+    team.rushYds,
+    team.ints,
+    team.fumbles,
+    team.fgm,
+    team.fga,
+    team.poss,
+    team.timeouts,
+    team.q1,
+    team.q2,
+    team.q3,
+    team.q4,
+    team.score
+  ]
 }
