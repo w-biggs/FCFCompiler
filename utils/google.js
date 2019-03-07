@@ -7,7 +7,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = '../config/token.json';
+const TOKEN_PATH = 'config/token.json';
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
