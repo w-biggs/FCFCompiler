@@ -4,7 +4,7 @@ const fs = require('fs');
 const readline = require('readline');
 const https = require('https');
 const authorize = require('./utils/google.js');
-const genJson = require('./utils/genJson.js');
+const {gameJson} = require('./utils/genJson.js');
 const writeSheet = require('./utils/writeSheet.js');
 
 const fetchJson = (teamName) => {
@@ -21,7 +21,7 @@ const fetchJson = (teamName) => {
   
     res.on('end', function(){
       rawJson = JSON.parse(body);
-      const newJson = genJson(rawJson);
+      const newJson = gameJson(rawJson);
       if(newJson.games.length > 0){
         writeJson(newJson);
         authorize((auth) => {

@@ -1,7 +1,7 @@
 /* Nov. 28, 2019 - Season Two Begins */
 const season = 1543363200.0;
 
-module.exports = function genJson(rawJson){
+const gameJson = (rawJson) => {
   let newJson = {
     "games": []
   };
@@ -63,4 +63,8 @@ module.exports = function genJson(rawJson){
     }
   });
   return newJson;
+}
+
+module.exports = {
+  gameJson
 }
