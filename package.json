@@ -10,6 +10,7 @@
     "googleapis": "27"
   },
   "scripts": {
-    "single": "node scripts/single.js"
+    "single": "node scripts/single.js",
+    "fcs": "node scripts/fcs.js"
   }
 }

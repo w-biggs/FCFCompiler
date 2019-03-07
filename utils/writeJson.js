@@ -1,28 +1,22 @@
 const fs = require('fs');
+const mergeGames = require('./mergeGames.js');
 
-const writeGames = (json) => {
-  fs.readFile('./games.json', function (err, data) {
+const writeGames = (json, merge = false) => {
+  if(merge){
+    fs.readFile('./games.json', function (err, data) {
+      if(!err){
+        const oldJson = JSON.parse(data);
+        json = mergeGames(oldJson, json);
+      } else {
+        console.log("Could not load games.json; creating/overwriting it.")
+      }
+    })
+  }
+  fs.writeFile("./games.json", JSON.stringify(json, null, 2), err => {
     if(err){
-      fs.writeFile("./games.json", JSON.stringify(json, null, 2), err => {
-        if(err){
-          return console.log(err);
-        }
-        console.log("JSON has been written to ./games.json");
-      });
+      console.log(err);
     } else {
-      const oldJson = JSON.parse(data);
-      /* add games to json only if haven't already been added */
-      json.games.forEach(game => {
-        if(!oldJson.games.some(e => e.id === game.id)){
-          oldJson.games.push(game);
-        }
-      });
-      fs.writeFile("./games.json", JSON.stringify(oldJson, null, 2), err => {
-        if(err){
-          return console.log(err);
-        }
-        console.log("JSON has been appended to ./games.json");
-      });
+      console.log("games.json has successfully been written.");
     }
   });
 }

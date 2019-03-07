@@ -4,3 +4,4 @@ const writeSheet = require('./utils/writeSheet.js');
 const fetchJson = require('./utils/fetchJson.js');
 const {writeGames} = require('./utils/writeJson.js');
 const promptTeam = require('./utils/promptTeam.js');
+const mergeGames = require('../utils/mergeGames.js');
