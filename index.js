@@ -23,12 +23,7 @@ const fetchJson = (teamName) => {
       rawJson = JSON.parse(body);
       const newJson = genJson(rawJson);
       if(newJson.games.length > 0){
-        fs.writeFile("./out.json", JSON.stringify(newJson, null, 2), err => {
-          if(err){
-            return console.log(err);
-          }
-          console.log("JSON has been written to ./out.json");
-        });
+        writeJson(newJson);
         authorize((auth) => {
           writeSheet(auth, newJson);
         });
@@ -36,6 +31,33 @@ const fetchJson = (teamName) => {
     });
   }).on('error', function(e){
     console.log("Got an HTTP error: ", e);
+  });
+}
+
+const writeJson = (json) => {
+  fs.readFile('./out.json', function (err, data) {
+    if(err){
+      fs.writeFile("./out.json", JSON.stringify(json, null, 2), err => {
+        if(err){
+          return console.log(err);
+        }
+        console.log("JSON has been written to ./out.json");
+      });
+    } else {
+      const oldJson = JSON.parse(data);
+      /* add games to json only if haven't already been added */
+      json.games.forEach(game => {
+        if(!oldJson.games.some(e => e.id === game.id)){
+          oldJson.games.push(game);
+        }
+      });
+      fs.writeFile("./out.json", JSON.stringify(oldJson, null, 2), err => {
+        if(err){
+          return console.log(err);
+        }
+        console.log("JSON has been appended to ./out.json");
+      });
+    }
   });
 }
 
