@@ -21,8 +21,8 @@ const gameJson = (rawJson) => {
         match = match.slice(1,31);
         [gameJson.away.name,
           gameJson.home.name,
-          gameJson.away.passYds,
           gameJson.away.rushYds,
+          gameJson.away.passYds,
           gameJson.away.yds,
           gameJson.away.ints,
           gameJson.away.fumbles,
