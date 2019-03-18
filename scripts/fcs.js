@@ -17,6 +17,6 @@ batchGames(teams.fcs).then((results) => {
   });
   promptFile((json, fileName) => {
     writeGames(json, fileName, true);
-    stats(json.games);
+    stats(json.games, 'fcs');
   }, json);
 });
