@@ -1,3 +1,4 @@
+const promptFile = require('../utils/promptFile.js');
 const teams = require('../config/teams.json');
 const {writeGames} = require('../utils/writeJson.js');
 const mergeGames = require('../utils/mergeGames.js');
@@ -14,6 +15,8 @@ batchGames(teams.fcs).then((results) => {
       gamesJson = mergeGames(gamesJson, result);
     }
   });
-  writeGames(gamesJson);
-  stats(gamesJson.games);
+  promptFile((json, fileName) => {
+    writeGames(json, fileName, true);
+    stats(json.games);
+  }, json);
 });

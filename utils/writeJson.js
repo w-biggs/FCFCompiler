@@ -1,33 +1,32 @@
 const fs = require('fs');
 const mergeGames = require('./mergeGames.js');
 
-const writeGames = (json, merge = false, callback = () => {}) => {
+const writeGames = (json, fileName = "games", merge = false, callback = () => {}) => {
   if(merge){
-    fs.readFile('./games.json', function (err, data) {
+    fs.readFile("./output/" + fileName + ".json", function (err, data) {
       if(!err){
         const oldJson = JSON.parse(data);
         json = mergeGames(oldJson, json);
       } else {
-        console.log("Could not load games.json; creating/overwriting it.")
+        console.log("Could not load " + fileName + ".json; creating/overwriting it.")
       }
+      writeJson(fileName, json, callback);
     })
+  } else {
+    writeJson(fileName, json, callback);
   }
-  fs.writeFile("./games.json", JSON.stringify(json, null, 2), err => {
-    if(err){
-      console.log(err);
-    } else {
-      console.log("games.json has successfully been written.");
-      callback();
-    }
-  });
 }
 
 const writeStats = (json, callback = () => {}) => {
-  fs.writeFile("./stats.json", JSON.stringify(json, null, 2), err => {
+  writeJson('stats', json, callback);
+}
+
+const writeJson = (fileName, json, callback) => {
+  fs.writeFile("./output/" + fileName + ".json", JSON.stringify(json, null, 2), err => {
     if(err){
       console.log(err);
     } else {
-      console.log("stats.json has successfully been written.");
+      console.log("./output/" + fileName + ".json has successfully been written.");
       callback();
     }
   });
