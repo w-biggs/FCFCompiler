@@ -23,7 +23,7 @@ const Team = {
 
 let stats = [];
 
-module.exports = (games) => {
+module.exports = (games, fileName, callback) => {
   games.forEach(game => {
     if(game.scrimmage){
       return;
@@ -81,5 +81,6 @@ module.exports = (games) => {
       stats[awayIndex].ties++;
     }
   });
-  writeStats(stats);
+  fileName += "-stats";
+  writeStats(stats, fileName, callback);
 }

@@ -10,18 +10,18 @@ const writeGames = (json, fileName = "games", merge = false, callback = () => {}
       } else {
         console.log("Could not load " + fileName + ".json; creating/overwriting it.")
       }
-      writeJson(fileName, json, callback);
+      writeJson(json, fileName, callback);
     })
   } else {
-    writeJson(fileName, json, callback);
+    writeJson(json, fileName, callback);
   }
 }
 
-const writeStats = (json, callback = () => {}) => {
-  writeJson('stats', json, callback);
+const writeStats = (json, fileName = 'stats', callback = () => {}) => {
+  writeJson(json, fileName, callback);
 }
 
-const writeJson = (fileName, json, callback) => {
+const writeJson = (json, fileName, callback) => {
   fs.writeFile("./output/" + fileName + ".json", JSON.stringify(json, null, 2), err => {
     if(err){
       console.log(err);
