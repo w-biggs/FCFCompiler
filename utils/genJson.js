@@ -1,13 +1,13 @@
 /* Nov. 28, 2019 - Season Two Begins */
 const season = 1543363200.0;
 
-const gameJson = (rawJson) => {
+const gameJson = (rawJson, single) => {
   let newJson = {
     "games": []
   };
-  rawJson.data.children.forEach(thread => {
+  rawJson.data.children.forEach((thread) => {
     const data = thread.data;
-    if(data.created_utc > season && data.link_flair_richtext.some(e => e.t === "Post Game Thread")){
+    if(data.created_utc > season && (data.link_flair_richtext.some(e => e.t === "Post Game Thread") || single)){
       let gameJson = {
         away: {},
         home: {}
@@ -59,6 +59,16 @@ const gameJson = (rawJson) => {
           data.selftext.indexOf(")", pasteIndex)
         );
       } 
+      if(single && data.selftext.includes("Quarter")){
+        const qTable = "Deadline\n:-:|:-:|:-:|:-:|:-:|:-:|:-:\n";
+        const qI = data.selftext.indexOf(qTable) + qTable.length;
+        const subst = data.selftext.substring(qI);
+        const qRegex = /^([0-9]*:[0-9]*)\|([0-9])/;
+        const info = qRegex.exec(subst);
+        if(info[1] !== "0:00" || info[2] !== "4"){
+          gameJson.quarter = info[2];
+        }
+      }
       newJson.games.push(gameJson);
     }
   });
