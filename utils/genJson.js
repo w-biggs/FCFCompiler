@@ -49,6 +49,11 @@ const gameJson = (rawJson, single) => {
           gameJson.away.q3,
           gameJson.away.q4,
           gameJson.away.score] = match;
+        const awayPoss = gameJson.away.poss.split(':');
+        gameJson.away.poss = (parseInt(awayPoss[0],10) * 60) + parseInt(awayPoss[1],10);
+        const homePoss = gameJson.home.poss.split(':');
+        gameJson.home.poss = (parseInt(homePoss[0],10) * 60) + parseInt(homePoss[1],10);
+        gameJson.gameLength = gameJson.away.poss + gameJson.home.poss;
       } else {
         return console.log("No games found.");
       }
@@ -69,7 +74,29 @@ const gameJson = (rawJson, single) => {
           gameJson.quarter = info[2];
         }
       }
-      newJson.games.push(gameJson);
+      const weeks = [
+        1542412800, // Nov 17 - Week 0
+        1543363200, // Nov 28 - Week 1
+        1544572800, // Dec 12 - Week 2
+        1545696000, // Dec 25 - Week 3
+        1546905600, // Jan 8 - Week 4
+        1548115200, // Jan 22 - Week 5
+        1549324800, // Feb 5 - Week 6
+        1550534400, // Feb 19 - Week 7
+        1551744000, // Mar 5 - Week 8
+        1552953600, // Mar 19 - Week 9
+        1554163200, // Apr 2 - Week 10
+        1555372800, // Apr 16 - Week 11
+        1556582400  // Apr 30 - Week 12
+      ];
+      weeks.forEach((date, week) => {
+        if(data.created_utc > date){
+          gameJson.week = week;
+        }
+      });
+      if(gameJson.gameLength > 0){
+        newJson.games.push(gameJson);
+      }
     }
   });
   return newJson;
