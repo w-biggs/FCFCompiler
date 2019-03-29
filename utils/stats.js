@@ -16,9 +16,12 @@ const Team = {
   fga: 0,
   pf: 0,
   pa: 0,
+  poss: 0,
+  defPoss: 0,
+  totalTime: 0,
   wins: 0,
   losses: 0,
-  ties: 0
+  ties: 0,
 }
 
 let stats = [];
@@ -33,9 +36,15 @@ module.exports = (games, fileName, callback) => {
 
     if(homeIndex < 0){
       homeIndex = stats.push(Object.create(Team)) - 1;
+      stats[homeIndex].wins = 0;
+      stats[homeIndex].losses = 0;
+      stats[homeIndex].ties = 0;
     }
     if(awayIndex < 0){
       awayIndex = stats.push(Object.create(Team)) - 1;
+      stats[awayIndex].wins = 0;
+      stats[awayIndex].losses = 0;
+      stats[awayIndex].ties = 0;
     }
 
     stats[homeIndex].name = game.home.name;
@@ -47,12 +56,15 @@ module.exports = (games, fileName, callback) => {
     stats[homeIndex].fga += Number(game.home.fga);
     stats[homeIndex].fgm += Number(game.home.fgm);
     stats[homeIndex].pf += Number(game.home.score);
+    stats[homeIndex].poss += Number(game.home.poss);
     stats[homeIndex].defPassYds += Number(game.away.passYds);
     stats[homeIndex].defRushYds += Number(game.away.rushYds);
     stats[homeIndex].defTotalYds += Number(game.away.yds);
     stats[homeIndex].defInts += Number(game.away.ints);
     stats[homeIndex].defFum += Number(game.away.fumbles);
     stats[homeIndex].pa += Number(game.away.score);
+    stats[homeIndex].defPoss += Number(game.away.poss);
+    stats[homeIndex].totalTime += Number(game.gameLength);
 
     stats[awayIndex].name = game.away.name;
     stats[awayIndex].offPassYds += Number(game.away.passYds);
@@ -63,17 +75,23 @@ module.exports = (games, fileName, callback) => {
     stats[awayIndex].fga += Number(game.away.fga);
     stats[awayIndex].fgm += Number(game.away.fgm);
     stats[awayIndex].pf += Number(game.away.score);
+    stats[awayIndex].poss += Number(game.away.poss);
     stats[awayIndex].defPassYds += Number(game.home.passYds);
     stats[awayIndex].defRushYds += Number(game.home.rushYds);
     stats[awayIndex].defTotalYds += Number(game.home.yds);
     stats[awayIndex].defInts += Number(game.home.ints);
     stats[awayIndex].defFum += Number(game.home.fumbles);
     stats[awayIndex].pa += Number(game.home.score);
+    stats[awayIndex].defPoss += Number(game.home.poss);
+    stats[awayIndex].totalTime += Number(game.gameLength);
 
-    if(game.home.score > game.away.score){
+    const homeScore = Number(game.home.score);
+    const awayScore = Number(game.away.score);
+
+    if(homeScore > awayScore){
       stats[homeIndex].wins++;
       stats[awayIndex].losses++;
-    } else if (game.home.score < game.away.score){
+    } else if (homeScore < awayScore){
       stats[awayIndex].wins++;
       stats[homeIndex].losses++;
     } else {
