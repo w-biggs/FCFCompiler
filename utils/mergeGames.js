@@ -5,6 +5,5 @@ module.exports = (oldJson, newJson) => {
       oldJson.games.push(game);
     }
   });
-  console.log(oldJson);
   return oldJson;
 }
