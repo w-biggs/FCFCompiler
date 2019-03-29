@@ -1,5 +1,5 @@
-/* Nov. 28, 2019 - Season Two Begins */
-const season = 1543363200.0;
+/* Nov. 17, 2019 - Season Two Begins */
+const season = 1542412800;
 
 const gameJson = (rawJson, single) => {
   let newJson = {
@@ -7,7 +7,7 @@ const gameJson = (rawJson, single) => {
   };
   rawJson.data.children.forEach((thread) => {
     const data = thread.data;
-    if(data.created_utc > season && (data.link_flair_richtext.some(e => e.t === "Post Game Thread") || single)){
+    if(data.created_utc > season && data.link_flair_richtext.some(e => e.t === "Game Thread")){
       let gameJson = {
         away: {},
         home: {}

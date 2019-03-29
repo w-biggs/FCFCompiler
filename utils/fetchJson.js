@@ -8,7 +8,7 @@ module.exports = (toSearch, callback, single) => {
   if(single){
     url = "https://www.reddit.com/api/info.json?id=t3_" + toSearch;
   } else {
-    url = "https://www.reddit.com/r/FakeCollegeFootball/search.json?q=flair%3APost%2BGame%2BThread%20" + toSearch + "&sort=new&restrict_sr=on&limit=100";
+    url = "https://www.reddit.com/r/FakeCollegeFootball/search.json?q=-flair:%22Post+Game+Thread%22%20%22" + toSearch + "%22&sort=new&restrict_sr=on&limit=100";
   }
   https.get(url, function(res){
     var body = '';
