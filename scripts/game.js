@@ -9,7 +9,7 @@ promptGame((gameID) => {
     if(json.games.length > 0){
       promptFile((json, fileName) => {
         writeGames(json, fileName, true);
-        stats(json.games);
+        //stats(json.games);
       }, json)
     }
   })

@@ -13,10 +13,10 @@ batchGames(teams.fcs).then((results) => {
   results.forEach(result => {
     if(result.games.length > 0){
       gamesJson = mergeGames(gamesJson, result);
+      promptFile((gamesJson, fileName) => {
+        writeGames(gamesJson, fileName, true);
+        //stats(json.games, 'fcs');
+      }, gamesJson);
     }
   });
-  promptFile((json, fileName) => {
-    writeGames(json, fileName, true);
-    stats(json.games, 'fcs');
-  }, json);
 });
