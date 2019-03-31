@@ -13,6 +13,7 @@
     "single": "node scripts/single.js",
     "fcs": "node scripts/fcs.js",
     "game": "node scripts/game.js",
-    "stats": "node scripts/stats.js"
+    "stats": "node scripts/stats.js",
+    "week": "node scripts/week.js"
   }
 }
